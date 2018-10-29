@@ -720,3 +720,88 @@ GET /_cat/indices?v
 ```
 
 ![verificacion_index_not_found_wazuh-alerts-3](imagenes/verificacion_index_not_found_wazuh-alerts-3.png)
+
+# Agentes de agrupación
+
+Hay dos métodos para configurar los agentes registrados. Se pueden configurar localmente con el archivo ossec.conf o de forma remota utilizando la configuración centralizada . Si se utiliza la configuración centralizada, los agentes pueden asignarse a grupos, y cada grupo posee una configuración única. Esto simplifica enormemente el proceso de configuración general.
+A menos que se asigne lo contrario, todos los agentes nuevos pertenecen automáticamente al grupo "predeterminado" .
+ Este grupo se crea durante el proceso de instalación con los archivos de configuración ubicados en la etc/shared/default/ carpeta.
+Estos archivos se enviarán desde el administrador a todos los agentes que pertenecen a este grupo.
+A continuación se muestran los pasos para asignar agentes a un grupo con una configuración específica:
+Una vez que se haya agregado un agente al administrador, asignarlo a un grupo utilizando la herramienta agent_groupso la API . A continuación, se muestran ejemplos de cómo asignar un agente con ID 002 al grupo 'nombre del grupo' usando estos métodos:
+Utilizando agent_groups :
+     var/ossec/bin/agent_groups -a -i 002 -g nombre del grupo
+La asignación de grupo de un agente se puede verificar usando uno de los siguientes comandos:
+Utilizando agent_groups :
+/var/ossec/bin/agent_groups -l -g nombredelgrupo
+
+
+
+Una vez que se crea un grupo, su agents.conf archivo se puede editar para incluir la configuración específica que desea asignar a este grupo. Para este ejemplo, el archivo que se editará se encuentra en etc/shared/dbms/agents.conf y cada agente que pertenece a este grupo recibirá este archivo.
+
+# NOTA: 
+Puede darse el caso de que no se  cree el directorio ni el archivo de configuracion del grupo, por lo cual se tiene que crear de forma manual dentro del directorio “etc”.
+Los agentes se pueden configurar de forma remota mediante el agent.conf archivo. Las siguientes capacidades se pueden configurar de forma remota:
+La sintaxis correcta de agent.conf se muestra a continuación junto con el proceso para enviar la configuración del administrador al agente.
+agent.conf
+configuracion xml
+<agent_config>
+    ...
+</agent_config>
+
+
+El agent.conf solo es válido en las instalaciones del servidor.
+La agent.conf pueden existir en cada carpeta en el grupo /var/ossec/etc/shared.
+creación de archivo:
+
+### Paso 1:Crear el archivo y todos los directorios como shared, directorio con nombre del grupo
+touch /var/ossec/etc/shared/default/agent.conf
+<agent_config name = "agent_name" > 
+    <localfile> 
+        <location> /var/log/my.log </location> 
+        <log_format> syslog </log_format> 
+    </localfile> 
+</agent_config>
+
+<agent_config os = "Linux" > 
+    <localfile> 
+        <location> /var/log/linux.log </location> 
+        <log_format> syslog </log_format> 
+    </localfile> 
+</agent_config>
+
+<agent_config profile = "database" > 
+    <localfile> 
+        <location> /var/log/database.log </location> 
+        <log_format> syslog </log_format> 
+    </localfile> 
+</agent_config>
+
+### Paso 2: Cambia la propiedad
+chown ossec: ossec /var/ossec/etc/shared/default/agent.conf
+###  Paso 3: Se le dan permisos de lectura,  escritura y ejecución al archivo
+chmod 640 /var/ossec/etc/shared/default/agent.conf
+
+### Paso 4: Ejecute   ---- >    / var / ossec / bin / verify-agent-conf
+Cada vez que realice un cambio en el agent.conf archivo, es importante verificar los errores de configuración.
+### Paso 5: Confirme que el agente recibió la configuración.
+Una vez que un agente recibe la configuración, el campo "Versión del cliente" tendrá la suma md5 del agent.confarchivo que se extrajo del administrador.
+-----> md5sum /var/ossec/etc/shared/default/agent.conf
+----->  /var/ossec/bin/agent_control -i 1032
+### Paso 6: Reiniciar el agente
+-----> /var/ossec/bin/agent_control -R -u 1032
+De esta manera se a creado el archivo correctamente y ya se pueden administrar.
+Administrar grupos de agentes:
+Asigne el grupo 'debian' al agente 002:
+---->  /var/ossec/bin/agent_groups -a -i 002 -g debian
+Obtener el grupo de agente 002:
+---->  /var/ossec/bin/agent_groups -s -i 002
+Listar todos los agentes en el grupo 'debian' :
+----> /var/ossec/bin/agent_groups -l -g debian
+Lista los archivos de configuración en el grupo 'debian' :
+----> /var/ossec/bin/agent_groups -c -g debian
+Elimine el agente 002 del grupo actual:
+---->  /var/ossec/bin/agent_groups -r -i 002
+Elimine el grupo 'debian' de cada agente:
+---->  /var/ossec/bin/agent_groups -r -g debian
+
