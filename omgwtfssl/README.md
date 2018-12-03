@@ -39,7 +39,7 @@ docker run -td --name=nginx --privileged=false -p 80:80 -p 443:443 \
 
 De igual forma necesitamos cambiar el archivo de configuración de **/var/containers/nginx/etc/nginx/vhosts/wazuh.conf** con el siguiente contenido:
 
-``bash
+```bash
 server {
     listen 443 ssl;
     server_name wazuh.azure.net;
