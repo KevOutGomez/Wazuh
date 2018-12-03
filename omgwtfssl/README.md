@@ -3,7 +3,7 @@ El levantar este contenedor tiene como finalidad la creación de certificados, e
 
 El comando para levantar el contenedor es el siguiente:
 ```bash
-docker run -v /var/containers/omgwtfssl/certs:/certs \
+docker run -v /var/containers/omgwtfssl/tmp/certs:/certs \
   -e SSL_SUBJECT=test.example.com   \
   paulczar/omgwtfssl
 ```
@@ -14,7 +14,7 @@ Donde:
 Para este caso en concreto utilizaremos el comando:
 
 ```bash
-docker run -v /var/containers/omgwtfssl/certs:/certs \
+docker run -v /var/containers/omgwtfssl/tmp/certs:/certs \
   -e SSL_SUBJECT=wazuh.azure.net   \
   paulczar/omgwtfssl
 ```
