@@ -31,7 +31,7 @@ docker run -td --name=nginx --privileged=false -p 80:80 -p 443:443 \
                     --volume=/var/containers/nginx/var/cache/nginx:/var/cache/nginx:z  \
                     --volume=/var/containers/nginx/var/backups:/var/backups:z \
                     --volume=/etc/localtime:/etc/localtime:ro \
-                    --volume=/var/containers/omgwtfssl/certs:/tmp/certs \
+                    --volume=/var/containers/omgwtfssl/tmp/certs:/tmp/certs \
                     --hostname=nginx.service \
                     docker.io/berryrreb/nginxmodsec
 ```
