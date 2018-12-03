@@ -16,7 +16,6 @@ Para este caso en concreto utilizaremos el comando:
 ```bash
 docker run -v /var/containers/omgwtfssl/certs:/certs \
   -e SSL_SUBJECT=wazuh.azure.net   \
-  -e SSL_SUBJECT=spacewalk.azure.net \
   paulczar/omgwtfssl
 ```
 
