@@ -405,7 +405,7 @@ A continuación se muestra su contenido:
 
 </ossec_config>
 ```
-Los isguientes archivos forman parte de las reglas para el monitoreo de aspectos como rookits, trojans etc.
+Los siguientes archivos forman parte de las reglas para el monitoreo de aspectos como rookits, trojans etc.
 
 Archivo **/var/containers/wazuh/wazuh/var/ossec/etc/shared/rootkit_files.txt**
 
@@ -1655,7 +1655,7 @@ El primer paso es acondicionar el servidor creando los volumenes utilizados por 
 ```bash
 mkdir -p /var/containers/wazuh/elk/kibana/
 ```
-Una vez creado el directorio, es necesario generar el archivo de configuración para Elasticsearch, **/var/containers/wazuh/elk/kibana/kibana.yml**.
+Una vez creado el directorio, es necesario generar el archivo de configuración para Kibana, **/var/containers/wazuh/elk/kibana/kibana.yml**.
 
 Cuyo contenido es el siguiente:
 
@@ -1674,6 +1674,6 @@ docker run --name=kibana_wazuh --link=elasticsearch_wazuh:elasticsearch --link=l
 
 **Hasta este punto el servidor de Wazuh ya se encuentra corriendo, de tal forma que al entrar en el navegador a http://localhost:5601 podremos ver desplegado el dashboard de Kiabana con el modulo de Wazuh integrado**
 
-NOTA: Todas las herramientas para la administracion de Wazuh se encuentran en el directorio **/var/ossec/bin/**
+NOTA: Todas las herramientas para la administración de Wazuh se encuentran en el directorio **/var/ossec/bin/**
 
 El comando **/var/ossec/bin/ossec-logtest -t** permite ver los logs del demonio que controla el API de Wazuh.
